@@ -1,13 +1,20 @@
 {
   "name": "macos-wallpaper",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "Sets wallpapers for individual spaces in macOS",
+  "author": "Dave Allie <dave@daveallie.com>",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daveallie/node-macos-wallpaper"
+  },
+  "bugs": {
+    "url": "https://github.com/daveallie/node-macos-wallpaper/issues"
+  },
   "dependencies": {
     "macos-spaces": "^2.0.0",
     "sqlite3": "^3.1.4"
