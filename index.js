@@ -3,8 +3,7 @@ var macOSSpaces = require("macos-spaces");
 var exec = require("child_process").exec;
 var db = require("./database");
 
-var closeDbKillDock = function() {
-  db.close();
+var restartDock = function() {
   exec('/usr/bin/killall Dock');
 };
 
@@ -16,13 +15,20 @@ var updateSpace = function(spaceUUID, wallpaper, callback) {
 
     if (space) {
       db.updateSpaceWallpaper(space.displayUUID, space.spaceUUID, wallpaper, function(err) {
-        if (err) return console.error(err);
-        console.log(this.lastID);
-        closeDbKillDock();
-        if (callback) callback();
+        restartDock();
+        if (callback) {
+          callback(err);
+        } else if (err) {
+          console.error(err);
+        }
       });
     } else {
-      return console.err('No known space with that id');
+      err = 'No known space with that id';
+      if (callback) {
+        callback(err);
+      } else {
+        console.error(err);
+      }
     }
   });
 };
@@ -34,16 +40,27 @@ var updatePrimarySpace = function(wallpaper, callback) {
 var updateAllSpaces = function(wallpapers, callback) {
   var done = 0;
   var doneLimit = 0;
+  var lastErr;
   var closeIfDone = function() {
     if (done >= doneLimit) {
-      closeDbKillDock();
-      if (callback) callback();
+      restartDock();
+      if (callback) {
+        callback(lastErr);
+      } else if (lastErr) {
+        console.error(lastErr);
+      }
     }
   };
 
   if (wallpapers.constructor !== Array) {
     wallpapers = [wallpapers];
   }
+
+  var updateSpaceCallback = function(err) {
+    if (err) lastErr = err;
+    done++;
+    closeIfDone();
+  };
 
   var did, sid, wal;
   macOSSpaces.spaces(function(spaces) {
@@ -52,12 +69,7 @@ var updateAllSpaces = function(wallpapers, callback) {
       did = spaces[i].displayUUID;
       sid = spaces[i].spaceUUID;
       wal = wallpapers[i % wallpapers.length];
-      db.updateSpaceWallpaper(did, sid, wal, function(err) {
-        if (err) return console.error(err);
-
-        done++;
-        closeIfDone();
-      });
+      db.updateSpaceWallpaper(did, sid, wal, updateSpaceCallback);
     }
   });
 };
