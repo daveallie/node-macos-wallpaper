@@ -29,7 +29,7 @@ var getDataIDs = function(db, displayUUID, spaceUUID, callback) {
     } else {
       db.get('SELECT ROWID FROM displays WHERE display_uuid = ?', displayUUID, function(err, displayRow) {
         if (err) return callback(err);
-        displayPart = 'display_id = ' + diplayRow.rowid;
+        displayPart = 'display_id = ' + displayRow.rowid;
         queryDataIDs();
       });
     }

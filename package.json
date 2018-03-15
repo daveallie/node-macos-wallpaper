@@ -16,7 +16,7 @@
     "url": "https://github.com/daveallie/node-macos-wallpaper/issues"
   },
   "dependencies": {
-    "macos-spaces": "^2.0.0",
+    "macos-spaces": "^2.1.0",
     "sqlite3": "^3.1.4"
   }
 }
