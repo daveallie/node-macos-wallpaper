@@ -1,6 +1,6 @@
 {
   "name": "macos-wallpaper",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Sets wallpapers for individual spaces in macOS",
   "author": "Dave Allie <dave@daveallie.com>",
   "main": "index.js",
